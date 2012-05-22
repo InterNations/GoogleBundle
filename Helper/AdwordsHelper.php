@@ -7,6 +7,9 @@ use Symfony\Component\Templating\Helper\Helper;
 
 class AdwordsHelper extends Helper
 {
+    /**
+     * @var \AntiMattr\GoogleBundle\Adwords
+     */
     private $adwords;
 
     public function __construct(Adwords $adwords)
@@ -22,16 +25,25 @@ class AdwordsHelper extends Helper
         return $this->adwords->activateConversionByKey($key);
     }
 
-    public function getActiveConversion()
+    /**
+     * @return \AntiMattr\GoogleBundle\Adwords\Conversion
+     */
+    public function getActiveConversions()
     {
-        return $this->adwords->getActiveConversion();
+        return $this->adwords->getActiveConversions();
     }
 
-    public function hasActiveConversion()
+    /**
+     * @return boolean
+     */
+    public function hasActiveConversions()
     {
-        return $this->adwords->hasActiveConversion();
+        return $this->adwords->hasActiveConversions();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
         return 'google_adwords';

@@ -9,10 +9,25 @@ class Adwords
 {
     const CONVERSION_KEY = 'google_adwords/conversion';
 
-    private $activeConversion;
+    /**
+     * @var array
+     */
+    private $activeConversions;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
     private $container;
+
+    /**
+     * @var array
+     */
     private $conversions;
 
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param array $conversions
+     */
     public function __construct(ContainerInterface $container, array $conversions = array())
     {
         $this->container = $container;
@@ -25,28 +40,35 @@ class Adwords
     public function activateConversionByKey($key)
     {
         if (array_key_exists($key, $this->conversions)) {
-            $this->container->get('session')->set(self::CONVERSION_KEY, $key);
+            if (!($activeConversionKeys = $this->container->get('session')->get(self::CONVERSION_KEY))) {
+                $activeConversionKeys = array();
+            }
+            $activeConversionKeys[] = $key;
+            $this->container->get('session')->set(self::CONVERSION_KEY, $activeConversionKeys);
         }
-    }	
+    }
 
     /**
      * @return Conversion $conversion
      */
-    public function getActiveConversion()
+    public function getActiveConversions()
     {
-        if ($this->hasActiveConversion()) {
-            $key = $this->container->get('session')->get(self::CONVERSION_KEY);
+        if ($this->hasActiveConversions()) {
+            $this->activeConversions = array();
+            $activeConversionKeys = $this->container->get('session')->get(self::CONVERSION_KEY);
             $this->container->get('session')->remove(self::CONVERSION_KEY);
-            $config = $this->conversions[$key];
-            $this->activeConversion = new Conversion($config['id'], $config['label'], $config['value']);
+            foreach ($activeConversionKeys as $key) {
+                $config = $this->conversions[$key];
+                $this->activeConversions[] = new Conversion($config['id'], $config['label'], $config['value']);
+            }
         }
-        return $this->activeConversion;
+        return $this->activeConversions;
     }
 
     /**
-     * @param boolean $hasActiveConversion
+     * @return boolean
      */
-    public function hasActiveConversion()
+    public function hasActiveConversions()
     {
         return $this->container->get('session')->has(self::CONVERSION_KEY);
     }
