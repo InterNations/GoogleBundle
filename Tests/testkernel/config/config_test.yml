@@ -29,6 +29,7 @@ google:
                 allowHash: false
                 allowLinker: true
                 trackPageLoadTime: false
+        dashboard: []
     adwords:
         conversions:
             account_create:
