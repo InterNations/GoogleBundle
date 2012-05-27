@@ -29,21 +29,21 @@ class AdwordsWebTest extends WebTestCase
 
     public function testConstructor()
     {
-        $this->assertFalse($this->adwords->hasActiveConversion());
-        $this->assertNull($this->adwords->getActiveConversion());
+        $this->assertFalse($this->adwords->hasActiveConversions());
+        $this->assertNull($this->adwords->getActiveConversions());
     }
 
     public function testActivateGetConversion()
     {
         $this->adwords->activateConversionByKey('incorrect_conversion');
-        $this->assertFalse($this->adwords->hasActiveConversion());
+        $this->assertFalse($this->adwords->hasActiveConversions());
 
         $this->adwords->activateConversionByKey('account_create');
-        $this->assertTrue($this->adwords->hasActiveConversion());
+        $this->assertTrue($this->adwords->hasActiveConversions());
 
-        $this->assertNotNull($this->adwords->getActiveConversion());
+        $this->assertNotNull($this->adwords->getActiveConversions());
 
         // Object will remain in service for duration of execution
-        $this->assertNotNull($this->adwords->getActiveConversion());
+        $this->assertNotNull($this->adwords->getActiveConversions());
     }
 }
