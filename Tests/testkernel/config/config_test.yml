@@ -36,3 +36,7 @@ google:
                 id:    111111
                 label: accountCreateLabel
                 value: 0
+            transaction:
+                id:    222222
+                label: transaction
+                value: 1

@@ -41,9 +41,12 @@ class AdwordsWebTest extends WebTestCase
         $this->adwords->activateConversionByKey('account_create');
         $this->assertTrue($this->adwords->hasActiveConversions());
 
-        $this->assertNotNull($this->adwords->getActiveConversions());
+        $this->adwords->activateConversionByKey('transaction');
+        $this->assertTrue($this->adwords->hasActiveConversions());
+
+        $this->assertCount(2, $this->adwords->getActiveConversions());
 
         // Object will remain in service for duration of execution
-        $this->assertNotNull($this->adwords->getActiveConversions());
+        $this->assertCount(2, $this->adwords->getActiveConversions());
     }
 }
