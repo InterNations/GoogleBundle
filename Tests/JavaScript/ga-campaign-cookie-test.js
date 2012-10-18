@@ -1,11 +1,22 @@
 buster.testCase('GA', {
     setUp: function() {
         window._gaq = [];
-        this.cookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign-source|utmccn=campaign-name|utmcmd=campaign-medium|utmctr=campaign-term|utmcct=campaign-content';
-        this.directCookie = '__utmz=68558281.1343123692.751.126.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)';
-        this.organicCookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign-source|utmccn=(organic)|utmcmd=organic';
-
-        this.encodedCookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign%3Dsource|utmccn=campaign%3Dname|utmcmd=campaign%3Dmedium|utmctr=campaign%3Dterm|utmcct=campaign%3Dcontent';
+        this.cookie = ['__utmz=68558281.1343123692.751.126.utmcsr=campaign-source',
+            'utmccn=campaign-name',
+            'utmcmd=campaign-medium',
+            'utmctr=campaign-term',
+            'utmcct=campaign-content'].join('|');
+        this.directCookie = ['__utmz=68558281.1343123692.751.126.utmcsr=(direct)',
+            'utmccn=(direct)',
+            'utmcmd=(none)'].join('|');
+        this.organicCookie = ['__utmz=68558281.1343123692.751.126.utmcsr=campaign-source',
+            'utmccn=(organic)',
+            'utmcmd=organic'].join('|');
+        this.encodedCookie = ['__utmz=68558281.1343123692.751.126.utmcsr=campaign%3Dsource',
+            'utmccn=campaign%3Dname',
+            'utmcmd=campaign%3Dmedium',
+            'utmctr=campaign%3Dterm',
+            'utmcct=campaign%3Dcontent'].join('|');
 
         this.deleteCookie = function() {
             var date = new Date();
@@ -287,9 +298,4 @@ buster.testCase('GA', {
             assert.equals(campaign.content, 'content');
         },
     }
-
-    /**
-     * @todo
-     *  - Testcase without reset
-     */
 });
