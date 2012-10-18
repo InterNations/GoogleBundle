@@ -29,7 +29,7 @@ buster.testCase('AntiMattr.setCampaignCookie', {
     'test getting campaign values': {
         'with existing campaign cookie': function() {
             this.setCookie(this.cookie);
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('campaign-source', campaign.source);
             assert.equals('campaign-medium', campaign.medium);
             assert.equals('campaign-name', campaign.name);
@@ -38,7 +38,7 @@ buster.testCase('AntiMattr.setCampaignCookie', {
         },
 
         'without cookie': function() {
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('', campaign.source);
             assert.equals('', campaign.medium);
             assert.equals('', campaign.name);
@@ -48,7 +48,7 @@ buster.testCase('AntiMattr.setCampaignCookie', {
 
         'with invalid cookie': function() {
             this.setCookie('__utmz=invalid');
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('', campaign.source);
             assert.equals('', campaign.medium);
             assert.equals('', campaign.name);
@@ -60,38 +60,38 @@ buster.testCase('AntiMattr.setCampaignCookie', {
     'test finding out if a campaign cookie is': {
         'direct': function() {
             this.setCookie(this.directCookie);
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
 
             assert(campaign.isDirect());
         },
         'organic': function() {
             this.setCookie(this.organicCookie);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert(campaign.isOrganic());
         },
         'campaign': function() {
             this.setCookie(this.cookie);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert(campaign.isCampaign('name'));
             assert(campaign.isCampaign('name$'));
             assert(campaign.isCampaign('campaign-name'));
             refute(campaign.isCampaign('foo'));
         },
         'new': function() {
-            assert(extga.getCampaignCookie().isNew());
+            assert(GA.getCampaignCookie().isNew());
         }
     },
 
     'test overriding campaign': {
         'source': function() {
-            extga._reset = true;
-            extga._setCampValues('src');
+            GA._reset = true;
+            GA._setCampValues('src');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('src', campaign.source);
             assert.equals('(empty)', campaign.medium);
             assert.equals('(direct)', campaign.name);
@@ -100,12 +100,12 @@ buster.testCase('AntiMattr.setCampaignCookie', {
         },
 
         'name': function() {
-            extga._reset = true;
-            extga._setCampValues(null, null, 'name');
+            GA._reset = true;
+            GA._setCampValues(null, null, 'name');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('(direct)', campaign.source);
             assert.equals('(empty)', campaign.medium);
             assert.equals('name', campaign.name);
@@ -113,12 +113,12 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('', campaign.content);
         },
         'medium': function() {
-            extga._reset = true;
-            extga._setCampValues(null, 'medium');
+            GA._reset = true;
+            GA._setCampValues(null, 'medium');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('(direct)', campaign.source);
             assert.equals('medium', campaign.medium);
             assert.equals('(direct)', campaign.name);
@@ -126,12 +126,12 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('', campaign.content);
         },
         'term': function() {
-            extga._reset = true;
-            extga._setCampValues(null, null, null, 'term');
+            GA._reset = true;
+            GA._setCampValues(null, null, null, 'term');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('(direct)', campaign.source);
             assert.equals('(empty)', campaign.medium);
             assert.equals('(direct)', campaign.name);
@@ -139,12 +139,12 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('', campaign.content);
         },
         'content': function() {
-            extga._reset = true;
-            extga._setCampValues(null, null, null, null, 'content');
+            GA._reset = true;
+            GA._setCampValues(null, null, null, null, 'content');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('(direct)', campaign.source);
             assert.equals('(empty)', campaign.medium);
             assert.equals('(direct)', campaign.name);
@@ -152,12 +152,12 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('content', campaign.content);
         },
         'all': function() {
-            extga._reset = true;
-            extga._setCampValues('source', 'medium', 'name', 'term', 'content');
+            GA._reset = true;
+            GA._setCampValues('source', 'medium', 'name', 'term', 'content');
 
             assert.equals([['_initData']], window._gaq);
 
-            var campaign = extga._getCampValues();
+            var campaign = GA._getCampValues();
             assert.equals('source', campaign.source);
             assert.equals('medium', campaign.medium);
             assert.equals('name', campaign.name);

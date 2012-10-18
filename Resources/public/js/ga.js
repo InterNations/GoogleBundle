@@ -1,5 +1,5 @@
-var extga = function(doc) {
-    function Utmz(cookieString) {
+var GA = function(doc) {
+    function CampaignCookie(cookieString) {
         this.value = unescape(cookieString);
         this.sr = '(direct)';
         this.cn = '(direct)';
@@ -16,7 +16,7 @@ var extga = function(doc) {
         }
 
         this.save = function() {
-            extga.setCookie('__utmz', this.value, 182)
+            GA.setCookie('__utmz', this.value, 182)
         };
 
         this.isNew = function() {
@@ -53,7 +53,7 @@ var extga = function(doc) {
         }
     }
 
-    var GA = {
+    var CampaignCookieManager = {
         _fm: false,
 
         _fr: false,
@@ -88,49 +88,49 @@ var extga = function(doc) {
         _reset: false,
 
         getCampaignCookie: function() {
-            return new Utmz(extga.tryGetCookie('__utmz'));
+            return new CampaignCookie(GA.tryGetCookie('__utmz'));
         },
 
         _setCampValues: function(source, medium, name, term, content, domain) {
-            extga.domain = domain || '';
-            extga.initialCookie = new Utmz(extga.tryGetCookie('__utmz'));
+            GA.domain = domain || '';
+            GA.initialCookie = new CampaignCookie(GA.tryGetCookie('__utmz'));
 
             _gaq.push(['_initData']);
 
-            extga.cookie = extga.getCampaignCookie();
-            if (extga.cookie.string !== extga.initialCookie.string) {
-               extga._fr = true;
-               extga.cookie = extga.getCampaignCookie();
+            GA.cookie = GA.getCampaignCookie();
+            if (GA.cookie.string !== GA.initialCookie.string) {
+               GA._fr = true;
+               GA.cookie = GA.getCampaignCookie();
             } else {
-                if (extga.cookie.isNew()) {
-                    extga._direct = true
+                if (GA.cookie.isNew()) {
+                    GA._direct = true
                 }
             }
 
-            if (extga._getCampValues().medium == 'referral') {
-                extga._fm = true
+            if (GA._getCampValues().medium == 'referral') {
+                GA._fm = true
             }
 
-            if (extga._fm || !extga._fr) {
-                if (extga._reset) extga.initialCookie.reset();
+            if (GA._fm || !GA._fr) {
+                if (GA._reset) GA.initialCookie.reset();
                 if (source) {
-                    extga.initialCookie._setCampSource(source);
+                    GA.initialCookie._setCampSource(source);
                 }
 
                 if (medium) {
-                    extga.initialCookie._setCampMedium(medium);
+                    GA.initialCookie._setCampMedium(medium);
                 }
 
                 if (name) {
-                    extga.initialCookie._setCampName(name);
+                    GA.initialCookie._setCampName(name);
                 }
 
                 if (term) {
-                    extga.initialCookie._setCampTerm(term);
+                    GA.initialCookie._setCampTerm(term);
                 }
 
                 if (content) {
-                    extga.initialCookie._setCampContent(content);
+                    GA.initialCookie._setCampContent(content);
                 }
             }
         },
@@ -143,7 +143,7 @@ var extga = function(doc) {
                 tr: 'term'
             };
 
-            var d = unescape(extga.tryGetCookie('__utmz'));
+            var d = unescape(GA.tryGetCookie('__utmz'));
 
             var campaign = {
                 source: '',
@@ -184,5 +184,5 @@ var extga = function(doc) {
             return campaign;
         }
     }
-    return GA;
+    return CampaignCookieManager;
 }(document);
