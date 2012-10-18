@@ -1,13 +1,13 @@
 var extga = function(doc) {
     function Utmz(cookieString) {
         this.value = unescape(cookieString);
-        this.sr = "(direct)";
-        this.cn = "(direct)";
-        this.cmd = "(none)";
-        this.string = "utmcsr=" + this.sr + "|utmccn=" + this.cn + "|utmcmd=" + this.cmd;
+        this.sr = '(direct)';
+        this.cn = '(direct)';
+        this.cmd = '(none)';
+        this.string = 'utmcsr=' + this.sr + '|utmccn=' + this.cn + '|utmcmd=' + this.cmd;
 
         if (cookieString != null) {
-            this.string = cookieString.replace(/^[0-9\.]*/, "");
+            this.string = cookieString.replace(/^[0-9\.]*/, '');
             cookieString.replace(/utmcsr=([^\|]*)\|utmccn=([^\|]*)\|utmcmd=([^|]*)/, function() {
                 this.sr = arguments[1];
                 this.cn = arguments[2];
@@ -16,40 +16,40 @@ var extga = function(doc) {
         }
 
         this.save = function() {
-            extga.setCookie("__utmz", this.value, 182)
+            extga.setCookie('__utmz', this.value, 182)
         };
 
         this.isNew = function() {
-            return this.value === "null"
+            return this.value === 'null' || this.value === '';
         };
 
         this._setCampName = function(c) {
-            this.value = this.value.replace(/utmccn=([^\|]*)/, "utmccn=" + c);
+            this.value = this.value.replace(/utmccn=([^\|]*)/, 'utmccn=' + c);
             this.save()
         };
 
         this._setCampSource = function(c) {
-            this.value = this.value.replace(/utmcsr=([^\|]*)/, "utmcsr=" + c);
+            this.value = this.value.replace(/utmcsr=([^\|]*)/, 'utmcsr=' + c);
             this.save()
         };
 
         this._setCampMedium = function(c) {
-            this.value = this.value.replace(/utmcmd=([^\|]*)/, "utmcmd=" + c);
+            this.value = this.value.replace(/utmcmd=([^\|]*)/, 'utmcmd=' + c);
             this.save()
         };
 
         this._setCampTerm = function(c) {
-            this.value = this.value.match(/utmctr=/) ? this.value.replace(/utmctr=([^\|]*)/, "utmctr=" + c) : this.value + "|utmctr=" + c;
+            this.value = this.value.match(/utmctr=/) ? this.value.replace(/utmctr=([^\|]*)/, 'utmctr=' + c) : this.value + '|utmctr=' + c;
             this.save()
         };
 
         this._setCampContent = function(c) {
-            this.value = this.value.match(/utmcct=/) ? this.value.replace(/utmcct=([^|]*)/, "utmcct=" + c) : this.value + "|utmcct=" + c;
+            this.value = this.value.match(/utmcct=/) ? this.value.replace(/utmcct=([^|]*)/, 'utmcct=' + c) : this.value + '|utmcct=' + c;
             this.save()
         };
 
         this.reset = function() {
-            this.value = this.value.replace(/^([0-9\.]*).*$/, "$1utmcsr=(direct)|utmccn=(direct)|utmcmd=(empty)|utmctr=(empty)");
+            this.value = this.value.replace(/^([0-9\.]*).*$/, '$1utmcsr=(direct)|utmccn=(direct)|utmcmd=(empty)|utmctr=(empty)');
         }
     }
 
@@ -61,19 +61,17 @@ var extga = function(doc) {
         tryGetCookie: function(name) {
             var regex,
                 match;
-            regex = new RegExp(name + "=([^;]*)");
+            regex = new RegExp(name + '=([^;]*)');
             match = doc.cookie.match(regex);
+
             return match && match.length == 2 ? match[1] : null
         },
 
-        _fixDomain: function(domain) {
-            if (domain !== "") {
-                return " domain=" + domain;
-            } else if (doc.domain.match(/^www/) !== null) {
-                return " domain=" + doc.domain.replace(/^www/, "");
-            } else {
-                return " domain=" + doc.domain;
+        _getDomainPart: function(domain) {
+            if (domain) {
+                return '; domain=' + doc.domain.replace(/^www/, '');
             }
+            return '';
         },
 
         setCookie: function(name, value, duration) {
@@ -83,7 +81,7 @@ var extga = function(doc) {
 
             date = new Date();
             date.setTime(date.getTime() + (duration * 24 * 60 * 60 * 1000));
-            var cookie = name + "=" + value + "; expires=" + date.toGMTString() + "; path=/;" + this._fixDomain(this.domain);
+            var cookie = name + '=' + value + '; expires=' + date.toGMTString() + '; path=/' + this._getDomainPart(this.domain);
             doc.cookie = cookie;
         },
 
@@ -94,10 +92,10 @@ var extga = function(doc) {
         },
 
         _setCampValues: function(source, medium, name, term, content, domain) {
-            extga.domain = domain || "";
-            extga.initialCookie = new Utmz(extga.tryGetCookie("__utmz"));
+            extga.domain = domain || '';
+            extga.initialCookie = new Utmz(extga.tryGetCookie('__utmz'));
 
-            _gaq.push(["_initData"]);
+            _gaq.push(['_initData']);
 
             extga.cookie = extga.getCampaignCookie();
             if (extga.cookie.string !== extga.initialCookie.string) {
@@ -109,7 +107,7 @@ var extga = function(doc) {
                 }
             }
 
-            if (extga._getCampValues().medium == "referral") {
+            if (extga._getCampValues().medium == 'referral') {
                 extga._fm = true
             }
 
@@ -138,42 +136,42 @@ var extga = function(doc) {
         },
        _getCampValues: function() {
             var mapping = {
-                sr: "source",
-                cn: "name",
-                md: "medium",
-                ct: "content",
-                tr: "term"
+                sr: 'source',
+                cn: 'name',
+                md: 'medium',
+                ct: 'content',
+                tr: 'term'
             };
 
-            var d = unescape(extga.tryGetCookie("__utmz"));
+            var d = unescape(extga.tryGetCookie('__utmz'));
 
             var campaign = {
-                source: "",
+                source: '',
 
-                medium: "",
+                medium: '',
 
-                name: "",
+                name: '',
 
-                term: "",
+                term: '',
 
-                content: "",
+                content: '',
 
                 isDirect: function() {
                     return (
-                        campaign.content === "" &&
-                        campaign.medium === "(none)" &&
-                        campaign.name === "(direct)" &&
-                        campaign.source === "(direct)" &&
-                        campaign.term === ""
+                        campaign.content === '' &&
+                        campaign.medium === '(none)' &&
+                        campaign.name === '(direct)' &&
+                        campaign.source === '(direct)' &&
+                        campaign.term === ''
                     );
                 },
 
                 isOrganic: function() {
-                    return (campaign.medium === "organic" && campaign.name === "(organic)")
+                    return campaign.medium === 'organic' && campaign.name === '(organic)';
                 },
 
                 isCampaign: function(name) {
-                    return campaign.name.match(new RegExp("(" + name + ")")) !== null
+                    return campaign.name.match(new RegExp('(' + name + ')')) !== null;
                 }
             };
 
