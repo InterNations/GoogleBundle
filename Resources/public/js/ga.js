@@ -1,6 +1,9 @@
 var GA = function(doc) {
+    var e = escape,
+      u = unescape;
+
     function CampaignCookie(cookieString) {
-        this.value = unescape(cookieString);
+        this.value = u(cookieString);
         this.sr = '(direct)';
         this.cn = '(direct)';
         this.cmd = '(none)';
@@ -23,28 +26,28 @@ var GA = function(doc) {
             return this.value === 'null' || this.value === '';
         };
 
-        this._setCampName = function(c) {
-            this.value = this.value.replace(/utmccn=([^\|]*)/, 'utmccn=' + c);
+        this._setCampaignName = function(c) {
+            this.value = this.value.replace(/utmccn=([^\|]*)/, 'utmccn=' + e(c));
             this.save()
         };
 
-        this._setCampSource = function(c) {
-            this.value = this.value.replace(/utmcsr=([^\|]*)/, 'utmcsr=' + c);
+        this._setCampaignSource = function(c) {
+            this.value = this.value.replace(/utmcsr=([^\|]*)/, 'utmcsr=' + e(c));
             this.save()
         };
 
-        this._setCampMedium = function(c) {
-            this.value = this.value.replace(/utmcmd=([^\|]*)/, 'utmcmd=' + c);
+        this._setCampaignMedium = function(c) {
+            this.value = this.value.replace(/utmcmd=([^\|]*)/, 'utmcmd=' + e(c));
             this.save()
         };
 
-        this._setCampTerm = function(c) {
-            this.value = this.value.match(/utmctr=/) ? this.value.replace(/utmctr=([^\|]*)/, 'utmctr=' + c) : this.value + '|utmctr=' + c;
+        this._setCampaignTerm = function(c) {
+            this.value = this.value.match(/utmctr=/) ? this.value.replace(/utmctr=([^\|]*)/, 'utmctr=' + e(c)) : this.value + '|utmctr=' + e(c);
             this.save()
         };
 
-        this._setCampContent = function(c) {
-            this.value = this.value.match(/utmcct=/) ? this.value.replace(/utmcct=([^|]*)/, 'utmcct=' + c) : this.value + '|utmcct=' + c;
+        this._setCampaignContent = function(c) {
+            this.value = this.value.match(/utmcct=/) ? this.value.replace(/utmcct=([^|]*)/, 'utmcct=' + e(c)) : this.value + '|utmcct=' + e(c);
             this.save()
         };
 
@@ -54,15 +57,9 @@ var GA = function(doc) {
     }
 
     var CampaignCookieManager = {
-        _fm: false,
-
-        _fr: false,
-
         _tryGetCookie: function(name) {
-            var regex,
-                match;
-            regex = new RegExp(name + '=([^;]*)');
-            match = doc.cookie.match(regex);
+            var regex = new RegExp(name + '=([^;]*)'),
+              match = doc.cookie.match(regex);
 
             return match && match.length == 2 ? match[1] : null
         },
@@ -82,107 +79,62 @@ var GA = function(doc) {
             doc.cookie = name + '=' + value + '; expires=' + date.toGMTString() + '; path=/' + this._getDomainPart(this.domain);
         },
 
-        _reset: false,
-
         getCampaignCookie: function() {
             return new CampaignCookie(GA._tryGetCookie('__utmz'));
         },
 
         setCampaignValues: function(source, medium, name, term, content, domain, reset) {
-            GA.domain = domain || '';
-            GA.initialCookie = new CampaignCookie(GA._tryGetCookie('__utmz'));
+            this.domain = domain || '';
+            this.cookie = this.getCampaignCookie();
 
             _gaq.push(['_initData']);
 
-            GA.cookie = GA.getCampaignCookie();
-            if (GA.cookie.string !== GA.initialCookie.string) {
-               GA._fr = true;
-               GA.cookie = GA.getCampaignCookie();
-            } else {
-                if (GA.cookie.isNew()) {
-                    GA._direct = true
-                }
-            }
-
-            if (GA.getCampaignValues().medium == 'referral') {
-                GA._fm = true
-            }
-
-            if (GA._fm || !GA._fr) {
-                if (reset) {
-                  GA.initialCookie.reset();
-                }
-
-                if (source) {
-                    GA.initialCookie._setCampSource(source);
-                }
-
-                if (medium) {
-                    GA.initialCookie._setCampMedium(medium);
-                }
-
-                if (name) {
-                    GA.initialCookie._setCampName(name);
-                }
-
-                if (term) {
-                    GA.initialCookie._setCampTerm(term);
-                }
-
-                if (content) {
-                    GA.initialCookie._setCampContent(content);
-                }
-            }
+            reset && this.cookie.reset();
+            source && this.cookie._setCampaignSource(source);
+            medium && this.cookie._setCampaignMedium(medium);
+            name && this.cookie._setCampaignName(name);
+            term && this.cookie._setCampaignTerm(term);
+            content && this.cookie._setCampaignContent(content);
         },
-       getCampaignValues: function() {
+        getCampaignValues: function() {
             var mapping = {
-                sr: 'source',
-                cn: 'name',
-                md: 'medium',
-                ct: 'content',
-                tr: 'term'
-            };
-
-            var d = unescape(GA._tryGetCookie('__utmz'));
-
-            var campaign = {
-                source: '',
-
-                medium: '',
-
-                name: '',
-
-                term: '',
-
-                content: '',
-
-                isDirect: function() {
-                    return (
-                        campaign.content === '' &&
-                        campaign.medium === '(none)' &&
-                        campaign.name === '(direct)' &&
-                        campaign.source === '(direct)' &&
-                        campaign.term === ''
-                    );
+                    sr: 'source',
+                    cn: 'name',
+                    md: 'medium',
+                    ct: 'content',
+                    tr: 'term'
                 },
-
-                isOrganic: function() {
-                    return campaign.medium === 'organic' && campaign.name === '(organic)';
+                campaign = {
+                    source: '',
+                    medium: '',
+                    name: '',
+                    term: '',
+                    content: '',
+                    isDirect: function() {
+                        return campaign.content === ''
+                            && campaign.medium === '(none)'
+                            && campaign.name === '(direct)'
+                            && campaign.source === '(direct)'
+                            && campaign.term === '';
+                    },
+                    isOrganic: function() {
+                        return campaign.medium === 'organic' && campaign.name === '(organic)';
+                    },
+                    isCampaign: function(name) {
+                        return campaign.name.match(new RegExp('(' + name + ')')) !== null;
+                    }
                 },
+                cookieString = this._tryGetCookie('__utmz');
 
-                isCampaign: function(name) {
-                    return campaign.name.match(new RegExp('(' + name + ')')) !== null;
-                }
-            };
-
-            if (d !== null) {
-                d.replace(/utmc([a-z]{2})=([^\|]*)/g, function(str, index, value) {
-                    campaign[mapping[index]] = value;
+            if (cookieString !== null) {
+                cookieString.replace(/utmc([a-z]{2})=([^\|]*)/g, function(str, index, value) {
+                    campaign[mapping[index]] = u(value);
                 });
             }
 
             return campaign;
         }
     }
+
     return CampaignCookieManager;
 }(document);

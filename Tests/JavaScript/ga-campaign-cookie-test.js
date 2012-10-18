@@ -1,9 +1,11 @@
-buster.testCase('AntiMattr.setCampaignCookie', {
+buster.testCase('GA', {
     setUp: function() {
         window._gaq = [];
         this.cookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign-source|utmccn=campaign-name|utmcmd=campaign-medium|utmctr=campaign-term|utmcct=campaign-content';
         this.directCookie = '__utmz=68558281.1343123692.751.126.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)';
         this.organicCookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign-source|utmccn=(organic)|utmcmd=organic';
+
+        this.encodedCookie = '__utmz=68558281.1343123692.751.126.utmcsr=campaign%3Dsource|utmccn=campaign%3Dname|utmcmd=campaign%3Dmedium|utmctr=campaign%3Dterm|utmcct=campaign%3Dcontent';
 
         this.deleteCookie = function() {
             var date = new Date();
@@ -54,6 +56,16 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('', campaign.name);
             assert.equals('', campaign.term);
             assert.equals('', campaign.content);
+        },
+
+        'from encoded string': function() {
+            this.setCookie(this.encodedCookie);
+            var campaign = GA.getCampaignValues();
+            assert.equals('campaign=source', campaign.source);
+            assert.equals('campaign=medium', campaign.medium);
+            assert.equals('campaign=name', campaign.name);
+            assert.equals('campaign=term', campaign.term);
+            assert.equals('campaign=content', campaign.content);
         }
     },
 
@@ -163,6 +175,24 @@ buster.testCase('AntiMattr.setCampaignCookie', {
             assert.equals('name', campaign.name);
             assert.equals('term', campaign.term);
             assert.equals('content', campaign.content);
+        },
+
+        'with values that need to be encoded': function() {
+            GA.setCampaignValues('utmfo=source', 'utmfo=medium', 'utmfo=name', 'utmfo=term', 'utmfo=content', null, true);
+            assert.equals([['_initData']], window._gaq);
+            assert.equals(document.cookie, '__utmz=utmcsr=utmfo%3Dsource|utmccn=utmfo%3Dname|utmcmd=utmfo%3Dmedium|utmctr=utmfo%3Dterm|utmcct=utmfo%3Dcontent')
+
+            var campaign = GA.getCampaignValues();
+            assert.equals('utmfo=source', campaign.source);
+            assert.equals('utmfo=medium', campaign.medium);
+            assert.equals('utmfo=name', campaign.name);
+            assert.equals('utmfo=term', campaign.term);
+            assert.equals('utmfo=content', campaign.content);
         }
     }
+
+    /**
+     * @todo
+     *  - Testcase without reset
+     */
 });
