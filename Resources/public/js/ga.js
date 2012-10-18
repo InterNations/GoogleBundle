@@ -16,7 +16,7 @@ var GA = function(doc) {
         }
 
         this.save = function() {
-            GA.setCookie('__utmz', this.value, 182)
+            GA._setCookie('__utmz', this.value, 182)
         };
 
         this.isNew = function() {
@@ -58,7 +58,7 @@ var GA = function(doc) {
 
         _fr: false,
 
-        tryGetCookie: function(name) {
+        _tryGetCookie: function(name) {
             var regex,
                 match;
             regex = new RegExp(name + '=([^;]*)');
@@ -74,26 +74,23 @@ var GA = function(doc) {
             return '';
         },
 
-        setCookie: function(name, value, duration) {
-            var cookie,
-                date;
+        _setCookie: function(name, value, duration) {
+            var date = new Date();
             duration = typeof e !== 'undefined' ? duration : 3;
 
-            date = new Date();
             date.setTime(date.getTime() + (duration * 24 * 60 * 60 * 1000));
-            var cookie = name + '=' + value + '; expires=' + date.toGMTString() + '; path=/' + this._getDomainPart(this.domain);
-            doc.cookie = cookie;
+            doc.cookie = name + '=' + value + '; expires=' + date.toGMTString() + '; path=/' + this._getDomainPart(this.domain);
         },
 
         _reset: false,
 
         getCampaignCookie: function() {
-            return new CampaignCookie(GA.tryGetCookie('__utmz'));
+            return new CampaignCookie(GA._tryGetCookie('__utmz'));
         },
 
-        _setCampValues: function(source, medium, name, term, content, domain) {
+        setCampaignValues: function(source, medium, name, term, content, domain, reset) {
             GA.domain = domain || '';
-            GA.initialCookie = new CampaignCookie(GA.tryGetCookie('__utmz'));
+            GA.initialCookie = new CampaignCookie(GA._tryGetCookie('__utmz'));
 
             _gaq.push(['_initData']);
 
@@ -107,12 +104,15 @@ var GA = function(doc) {
                 }
             }
 
-            if (GA._getCampValues().medium == 'referral') {
+            if (GA.getCampaignValues().medium == 'referral') {
                 GA._fm = true
             }
 
             if (GA._fm || !GA._fr) {
-                if (GA._reset) GA.initialCookie.reset();
+                if (reset) {
+                  GA.initialCookie.reset();
+                }
+
                 if (source) {
                     GA.initialCookie._setCampSource(source);
                 }
@@ -134,7 +134,7 @@ var GA = function(doc) {
                 }
             }
         },
-       _getCampValues: function() {
+       getCampaignValues: function() {
             var mapping = {
                 sr: 'source',
                 cn: 'name',
@@ -143,7 +143,7 @@ var GA = function(doc) {
                 tr: 'term'
             };
 
-            var d = unescape(GA.tryGetCookie('__utmz'));
+            var d = unescape(GA._tryGetCookie('__utmz'));
 
             var campaign = {
                 source: '',
