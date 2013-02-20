@@ -67,4 +67,12 @@ class AdwordsWebTest extends WebTestCase
             $activeConversion->getParameters()
         );
     }
+
+    public function testEnablingAConversionTwice()
+    {
+        $this->assertNull($this->adwords->getActiveConversions());
+        $this->adwords->activateConversionByKey('account_create');
+        $this->adwords->activateConversionByKey('account_create');
+        $this->assertCount(1, $this->adwords->getActiveConversions());
+    }
 }

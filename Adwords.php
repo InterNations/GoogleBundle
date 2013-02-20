@@ -43,6 +43,9 @@ class Adwords
             if (!($activeConversionKeys = $this->container->get('session')->get(self::CONVERSION_KEY))) {
                 $activeConversionKeys = array();
             }
+            if (in_array($key, $activeConversionKeys, true)) {
+                return;
+            }
             $activeConversionKeys[] = $key;
             $this->container->get('session')->set(self::CONVERSION_KEY, $activeConversionKeys);
         }
