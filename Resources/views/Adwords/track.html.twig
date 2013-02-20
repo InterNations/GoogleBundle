@@ -4,7 +4,7 @@
 <script type="text/javascript">
 {% for key, value in activeConversion.getParameters() %}
     var google_{{ key }} = {{ value }};
-{% endif %}
+{% endfor %}
 /* ]]> */
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
