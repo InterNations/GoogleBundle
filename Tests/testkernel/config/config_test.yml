@@ -44,6 +44,6 @@ google:
                 label: remarketingLabel
                 remarketing_only: true
                 tracking_url: http://custom.com
-                format: ~
-                language: ~
-                color: ~
+                conversion_format: ~
+                conversion_language: ~
+                conversion_color: ~

@@ -37,12 +37,12 @@ class ConversionTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             array(
-                'id' => $this->id, 
-                'label' => $this->label, 
-                'value' => $this->value, 
-                'language' => 'en',
-                'format' => '2',
-                'color' => 'ffffff',
+                'conversion_id' => $this->id, 
+                'conversion_label' => $this->label, 
+                'conversion_value' => $this->value, 
+                'conversion_language' => 'en',
+                'conversion_format' => '2',
+                'conversion_color' => 'ffffff',
            ),
            $this->conversion->getParameters()
         );
@@ -50,14 +50,14 @@ class ConversionTest extends \PHPUnit_Framework_TestCase
 
     public function testResetDefaultByPassingNull()
     {
-        $this->conversion->setParameter('color', null);
+        $this->conversion->setParameter('conversion_color', null);
         $this->assertSame(
             array(
-                'id' => $this->id, 
-                'label' => $this->label, 
-                'value' => $this->value, 
-                'language' => 'en',
-                'format' => '2',
+                'conversion_id' => $this->id, 
+                'conversion_label' => $this->label, 
+                'conversion_value' => $this->value, 
+                'conversion_language' => 'en',
+                'conversion_format' => '2',
            ),
            $this->conversion->getParameters()
         );
