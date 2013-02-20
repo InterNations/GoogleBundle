@@ -5,35 +5,35 @@ namespace AntiMattr\GoogleBundle\Adwords;
 class Conversion
 {
     private $parameters = array(
-        'id'       => null,
-        'label'    => null,
-        'value'    => null,
-        'language' => 'en',
-        'format'   => '2',
-        'color'   => 'ffffff',
+        'conversion_id'       => null,
+        'conversion_label'    => null,
+        'conversion_value'    => null,
+        'conversion_language' => 'en',
+        'conversion_format'   => '2',
+        'conversion_color'   => 'ffffff',
     );
     private $trackingUrl = 'https://www.googleadservices.com/pagead/conversion/';
 
     public function __construct($id, $label, $value)
     {
-        $this->parameters['id'] = $id;
-        $this->parameters['label'] = $label;
-        $this->parameters['value'] = $value;
+        $this->parameters['conversion_id'] = $id;
+        $this->parameters['conversion_label'] = $label;
+        $this->parameters['conversion_value'] = $value;
     }
 
     public function getId()
     {
-        return $this->parameters['id'];
+        return $this->parameters['conversion_id'];
     }
 
     public function getLabel()
     {
-        return $this->parameters['label'];
+        return $this->parameters['conversion_label'];
     }
 
     public function getValue()
     {
-        return $this->parameters['value'];
+        return $this->parameters['conversion_value'];
     }
 
     public function setTrackingUrl($trackingUrl)

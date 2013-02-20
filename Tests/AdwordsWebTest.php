@@ -56,8 +56,8 @@ class AdwordsWebTest extends WebTestCase
         $this->assertSame('http://custom.com', $activeConversion->getTrackingUrl());
         $this->assertSame(
             array(
-                'id' => 222222,
-                'label' => 'remarketingLabel',
+                'conversion_id' => 222222,
+                'conversion_label' => 'remarketingLabel',
                 'remarketing_only' => true
             ),
             $activeConversion->getParameters()
