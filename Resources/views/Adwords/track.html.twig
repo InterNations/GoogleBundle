@@ -4,7 +4,7 @@
 /* <![CDATA[ */
 {% for key, value in google_adwords.activeConversion.getParameters() %}
     var google_{{ key }} = {{ value }};
-{% endif %}
+{% endfor %}
 /* ]]> */
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
