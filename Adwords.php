@@ -59,7 +59,22 @@ class Adwords
             $this->container->get('session')->remove(self::CONVERSION_KEY);
             foreach ($activeConversionKeys as $key) {
                 $config = $this->conversions[$key];
-                $this->activeConversions[] = new Conversion($config['id'], $config['label'], $config['value']);
+                $config = array_merge(
+                    array(
+                        'label' => null,
+                        'value' => null,
+                    ),
+                    $this->conversions[$key]
+                );
+                $conversion = new Conversion($config['id'], $config['label'], $config['value']);
+                if (isset($config['tracking_url'])) {
+                    $conversion->setTrackingUrl($config['tracking_url']);
+                }
+                unset($config['id'], $config['label'], $config['value'], $config['tracking_url']);
+                foreach ($config as $key => $value) {
+                    $conversion->setParameter($key, $value);
+                }
+                $this->activeConversions[] = $conversion;
             }
         }
         return $this->activeConversions;

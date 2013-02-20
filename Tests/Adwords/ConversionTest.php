@@ -32,4 +32,34 @@ class ConversionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->label, $this->conversion->getLabel());
         $this->assertEquals($this->value, $this->conversion->getValue());
     }
+
+    public function testParameterDefaults()
+    {
+        $this->assertSame(
+            array(
+                'id' => $this->id, 
+                'label' => $this->label, 
+                'value' => $this->value, 
+                'language' => 'en',
+                'format' => '2',
+                'color' => 'ffffff',
+           ),
+           $this->conversion->getParameters()
+        );
+    }
+
+    public function testResetDefaultByPassingNull()
+    {
+        $this->conversion->setParameter('color', null);
+        $this->assertSame(
+            array(
+                'id' => $this->id, 
+                'label' => $this->label, 
+                'value' => $this->value, 
+                'language' => 'en',
+                'format' => '2',
+           ),
+           $this->conversion->getParameters()
+        );
+    }
 }

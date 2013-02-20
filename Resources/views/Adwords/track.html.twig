@@ -2,13 +2,9 @@
 {% for activeConversion in google_adwords.getActiveConversions() %}
 <!-- GOOGLE CODE FOR CONVERSION START -->
 <script type="text/javascript">
-/* <![CDATA[ */
-var google_conversion_id = {{ activeConversion.getId() }};
-var google_conversion_language = "en";
-var google_conversion_format = "2";
-var google_conversion_color = "ffffff";
-var google_conversion_label = "{{ activeConversion.getLabel() }}";
-var google_conversion_value = {{ activeConversion.getValue() }};
+{% for key, value in activeConversion.getParameters() %}
+    var google_{{ key }} = {{ value }};
+{% endif %}
 /* ]]> */
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
@@ -16,7 +12,7 @@ var google_conversion_value = {{ activeConversion.getValue() }};
 <noscript>
 <div style="display:inline;">
 <img height="1" width="1" style="border-style:none;" alt=""
-	src="https://www.googleadservices.com/pagead/conversion/{{ activeConversion.getId() }}/?label={{ activeConversion.getLabel() }}&amp;value={{ activeConversion.getValue() }}&amp;guid=ON&amp;script=0"/>
+	src="{{ activeConversion.getTrackingUrl() }}{{ activeConversion.getId() }}/?label={{ activeConversion.getLabel() }}&amp;value={{ activeConversion.getValue() }}&amp;guid=ON&amp;script=0"/>
 </div>
 </noscript>
 <!-- GOOGLE CODE FOR CONVERSION END -->

@@ -4,20 +4,16 @@ namespace AntiMattr\GoogleBundle\Adwords;
 
 class Conversion
 {
-    /**
-     * @var int
-     */
-    private $id;
+    private $parameters = array(
+        'id'       => null,
+        'label'    => null,
+        'value'    => null,
+        'language' => 'en',
+        'format'   => '2',
+        'color'   => 'ffffff',
+    );
 
-    /**
-     * @var string
-     */
-    private $label;
-
-    /**
-     * @var string
-     */
-    private $value;
+    private $trackingUrl = 'https://www.googleadservices.com/pagead/conversion/';
 
     /**
      * @param $id int
@@ -26,9 +22,9 @@ class Conversion
      */
     public function __construct($id, $label, $value)
     {
-        $this->id = $id;
-        $this->label = $label;
-        $this->value = $value;
+        $this->parameters['id'] = $id;
+        $this->parameters['label'] = $label;
+        $this->parameters['value'] = $value;
     }
 
     /**
@@ -36,7 +32,7 @@ class Conversion
      */
     public function getId()
     {
-        return $this->id;
+        return $this->parameters['id'];
     }
 
     /**
@@ -44,7 +40,7 @@ class Conversion
      */
     public function getLabel()
     {
-        return $this->label;
+        return $this->parameters['label'];
     }
 
     /**
@@ -52,6 +48,26 @@ class Conversion
      */
     public function getValue()
     {
-        return $this->value;
+        return $this->parameters['value'];
+    }
+
+    public function setTrackingUrl($trackingUrl)
+    {
+        $this->trackingUrl = $trackingUrl;
+    }
+
+    public function getTrackingUrl()
+    {
+        return $this->trackingUrl;
+    }
+
+    public function setParameter($parameter, $value)
+    {
+        $this->parameters[$parameter] = $value;
+    }
+
+    public function getParameters()
+    {
+        return array_filter($this->parameters, function ($value) {return $value !== null;});
     }
 }

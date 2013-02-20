@@ -39,3 +39,11 @@ google:
                 id:    222222
                 label: transaction
                 value: 1
+            remarketing:
+                id:    333333
+                label: remarketingLabel
+                remarketing_only: true
+                tracking_url: http://custom.com
+                format: ~
+                language: ~
+                color: ~
