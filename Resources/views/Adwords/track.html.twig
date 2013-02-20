@@ -2,9 +2,11 @@
 {% for activeConversion in google_adwords.getActiveConversions() %}
 <!-- GOOGLE CODE FOR CONVERSION START -->
 <script type="text/javascript">
+{% autoescape 'js' %}
 {% for key, value in activeConversion.getParameters() %}
-    var google_{{ key }} = {{ value }};
+    var google_{{ key }} = '{{ value }}';
 {% endfor %}
+{% endautoescape %}
 /* ]]> */
 </script>
 <script type="text/javascript" src="https://www.googleadservices.com/pagead/conversion.js">
