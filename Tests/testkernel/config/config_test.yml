@@ -34,3 +34,11 @@ google:
                 id:    111111
                 label: accountCreateLabel
                 value: 0
+            remarketing:
+                id:    222222
+                label: remarketingLabel
+                remarketing_only: true
+                tracking_url: http://custom.com
+                format: ~
+                language: ~
+                color: ~

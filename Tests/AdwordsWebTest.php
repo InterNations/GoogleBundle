@@ -46,4 +46,21 @@ class AdwordsWebTest extends WebTestCase
         // Object will remain in service for duration of execution
         $this->assertNotNull($this->adwords->getActiveConversion());
     }
+
+    public function testActiveConversionWithOptionParameters()
+    {
+        $this->adwords->activateConversionByKey('remarketing');
+
+        $activeConversion = $this->adwords->getActiveConversion();
+
+        $this->assertSame('http://custom.com', $activeConversion->getTrackingUrl());
+        $this->assertSame(
+            array(
+                'id' => 222222,
+                'label' => 'remarketingLabel',
+                'remarketing_only' => true
+            ),
+            $activeConversion->getParameters()
+        );
+    }
 }
