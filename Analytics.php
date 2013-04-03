@@ -225,7 +225,7 @@ class Analytics
      */
     public function addCustomVariable(CustomVariable $customVariable)
     {
-        $this->customVariables[] = $customVariable;
+        $this->add('customVariables', $customVariable);
     }
 
     /**
@@ -233,7 +233,7 @@ class Analytics
      */
     public function getCustomVariables()
     {
-        return $this->customVariables;
+        return $this->getOnce('customVariables');
     }
 
     /**
@@ -241,10 +241,7 @@ class Analytics
      */
     public function hasCustomVariables()
     {
-        if (!empty($this->customVariables)) {
-            return true;
-        }
-        return false;
+        return $this->has('customVariables');
     }
 
     /**
