@@ -176,6 +176,23 @@ class Analytics
 
     /**
      * @param string $trackerKey
+     * @param int $sampleRate
+     */
+    public function setSampleRate($trackerKey, $sampleRate)
+    {
+        $this->setTrackerProperty($trackerKey, 'setSampleRate', $sampleRate);
+    }
+
+    public function getSampleRate($trackerKey)
+    {
+        $property = $this->getTrackerProperty($trackerKey, 'setSampleRate');
+        if ($property !== null) {
+            return (int) $property;
+        }
+    }
+
+    /**
+     * @param string $trackerKey
      * @param int $siteSpeedSampleRate
      */
     public function setSiteSpeedSampleRate($trackerKey, $siteSpeedSampleRate)
@@ -497,7 +514,7 @@ class Analytics
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getApiKey()
@@ -506,7 +523,7 @@ class Analytics
     }
 
     /**
-     * 
+     *
      * @return string
      */
     public function getClientId()
@@ -515,7 +532,7 @@ class Analytics
     }
 
     /**
-     * @return string 
+     * @return string
      */
     public function getTableId()
     {

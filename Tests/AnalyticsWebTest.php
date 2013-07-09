@@ -218,4 +218,11 @@ class AnalyticsWebTest extends WebTestCase
         $this->analytics->setSiteSpeedSampleRate('default', '6');
         $this->assertEquals(6, $this->analytics->getSiteSpeedSampleRate('default'));
     }
+
+    public function testSetSampleRate()
+    {
+        $this->assertNull($this->analytics->getSampleRate('default'));
+        $this->analytics->setSampleRate('default', '6');
+        $this->assertEquals(6, $this->analytics->getSampleRate('default'));
+    }
 }

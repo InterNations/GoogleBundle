@@ -8,7 +8,7 @@ AntiMattr.GoogleAnalytics.onGatLoad = function(callback) {
     } else {
         var listener = this;
         setTimeout(function(){
-            listener.onGatLoad(callback);					
+            listener.onGatLoad(callback);
         },100);
     }
 };
@@ -60,6 +60,11 @@ if ( _gaq == null || typeof(_gaq) != 'array') { var _gaq = window._gaq = []; }
     {% set siteSpeedSampleRate = google_analytics.getSiteSpeedSampleRate(key) %}
     {% if siteSpeedSampleRate is defined and siteSpeedSampleRate is not null %}
         _gaq.push(['{{ google_analytics.trackerName(key) }}_setSiteSpeedSampleRate', {{ siteSpeedSampleRate }}]);
+    {% endif %}
+
+    {% set sampleRate = google_analytics.getSampleRate(key) %}
+    {% if sampleRate is defined and sampleRate is not null %}
+        _gaq.push(['{{ google_analytics.trackerName(key) }}_setSampleRate', {{ sampleRate }}]);
     {% endif %}
 
     {% if google_analytics.hasPageViewQueue %}
