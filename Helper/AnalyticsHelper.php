@@ -49,6 +49,11 @@ class AnalyticsHelper extends Helper
         return $this->analytics->getSiteSpeedSampleRate($trackerKey);
     }
 
+    public function getSampleRate($trackerKey)
+    {
+        return $this->analytics->getSampleRate($trackerKey);
+    }
+
     public function hasCustomPageView()
     {
         return $this->analytics->hasCustomPageView();
