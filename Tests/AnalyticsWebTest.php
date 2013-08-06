@@ -12,6 +12,7 @@ use AntiMattr\GoogleBundle\Analytics\Transaction;
 
 class AnalyticsWebTest extends WebTestCase
 {
+    /** @var Analytics */
     private $analytics;
     private $client;
 
@@ -224,5 +225,26 @@ class AnalyticsWebTest extends WebTestCase
         $this->assertNull($this->analytics->getSampleRate('default'));
         $this->analytics->setSampleRate('default', '6');
         $this->assertEquals(6, $this->analytics->getSampleRate('default'));
+    }
+
+    public function testSetCustomVariables()
+    {
+        $this->assertFalse($this->analytics->hasCustomVariables());
+        $this->analytics->addCustomVariable(new Analytics\CustomVariable(1, 'var', 'value'));
+        $this->assertTrue($this->analytics->hasCustomVariables());
+        $this->assertCount(1, $this->analytics->getCustomVariables());
+        $this->assertCount(0, $this->analytics->getCustomVariables());
+    }
+
+    public function testDuplicateCustomVariablesAreRemoved()
+    {
+        $this->analytics->addCustomVariable(new Analytics\CustomVariable(1, 'var', 'value'));
+        $this->analytics->addCustomVariable(new Analytics\CustomVariable(1, 'var', 'value'));
+        $this->assertCount(1, $this->analytics->getCustomVariables());
+
+
+        $this->analytics->addCustomVariable(new Analytics\CustomVariable(1, 'var', 'value'));
+        $this->analytics->addCustomVariable(new Analytics\CustomVariable(1, 'var', 'value', 2));
+        $this->assertCount(2, $this->analytics->getCustomVariables());
     }
 }

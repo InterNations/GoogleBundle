@@ -6,6 +6,7 @@ use AntiMattr\GoogleBundle\Analytics\CustomVariable;
 use AntiMattr\GoogleBundle\Analytics\Event;
 use AntiMattr\GoogleBundle\Analytics\Item;
 use AntiMattr\GoogleBundle\Analytics\Transaction;
+use Doctrine\Common\Comparable;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Analytics
@@ -463,6 +464,15 @@ class Analytics
     private function add($key, $value)
     {
         $bucket = $this->container->get('session')->get($key, array());
+
+        if ($value instanceof Comparable) {
+            foreach ($bucket as $existing) {
+                if ($value->compareTo($existing) === 0) {
+                    return;
+                }
+            }
+        }
+
         $bucket[] = $value;
         $this->container->get('session')->set($key, $bucket);
     }
